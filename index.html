@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Dev.Kesh | Travel Beyond Limits - Background Slider</title>
+    <!-- Google Fonts + Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Fullscreen Background Slider */
+        .bg-slider-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-slider-images {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .bg-slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .bg-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.45) contrast(1.1);
+        }
+
+        /* Overlay for better text readability */
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Main Content - sits above background */
+        .content {
+            position: relative;
+            z-index: 10;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        @media (min-width: 768px) {
+            .content {
+                padding: 0 40px;
+            }
+        }
+
+        /* Glassmorphism Navigation */
+        .navbar {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            gap: 20px;
+            backdrop-filter: blur(12px);
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 60px;
+            margin-top: 20px;
+            padding: 15px 25px;
+        }
+        
+        @media (min-width: 992px) {
+            .navbar {
+                flex-direction: row;
+                padding: 18px 30px;
+                margin-top: 20px;
+            }
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        @media (min-width: 768px) {
+            .logo {
+                font-size: 32px;
+            }
+        }
+        
+        .logo span {
+            color: #f0bb1f;
+            font-weight: 900;
+        }
+        
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 24px;
+            align-items: center;
+        }
+        
+        @media (min-width: 768px) {
+            .nav-links {
+                gap: 48px;
+            }
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 500;
+            color: #ffffff;
+            transition: 0.2s;
+            font-size: 14px;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+        }
+        
+        @media (min-width: 768px) {
+            .nav-links a {
+                font-size: 17px;
+            }
+        }
+        
+        .nav-links a:hover {
+            color: #f0bb1f;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .login-btn, .signup-btn {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: white;
+            transition: 0.2s;
+            backdrop-filter: blur(4px);
+        }
+        
+        .signup-btn {
+            background: #df6951;
+            border-color: #df6951;
+        }
+        
+        .signup-btn:hover, .login-btn:hover {
+            background: #f0bb1f;
+            color: #1e2b3c;
+            border-color: #f0bb1f;
+        }
+        
+        .lang-select {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            color: white;
+        }
+
+        /* Hero Section - Glass effect */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 60px 0 80px;
+            gap: 50px;
+            min-height: 85vh;
+        }
+        
+        @media (min-width: 992px) {
+            .hero {
+                flex-direction: row;
+                padding: 80px 0 100px;
+            }
+        }
+        
+        .hero-left {
+            flex: 1.2;
+            text-align: center;
+            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            border-radius: 40px;
+        }
+        
+        @media (min-width: 992px) {
+            .hero-left {
+                text-align: left;
+                background: rgba(0, 0, 0, 0.2);
+                backdrop-filter: blur(8px);
+            }
+        }
+        
+        .hero-badge {
+            color: #f0bb1f;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 14px;
+        }
+        
+        @media (min-width: 768px) {
+            .hero-badge {
+                font-size: 18px;
+            }
+        }
+        
+        .hero-left h1 {
+            font-size: 42px;
+            line-height: 1.2;
+            font-weight: 800;
+            color: #ffffff;
+            margin: 20px 0;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.3);
+        }
+        
+        @media (min-width: 768px) {
+            .hero-left h1 {
+                font-size: 60px;
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .hero-left h1 {
+                font-size: 72px;
+            }
+        }
+        
+        .hero-left h1 span {
+            color: #f0bb1f;
+        }
+        
+        .hero-desc {
+            color: rgba(255,255,255,0.9);
+            font-size: 14px;
+            max-width: 100%;
+            margin-bottom: 35px;
+        }
+        
+        @media (min-width: 768px) {
+            .hero-desc {
+                font-size: 16px;
+                max-width: 450px;
+            }
+        }
+        
+        .hero-actions {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        @media (min-width: 992px) {
+            .hero-actions {
+                justify-content: flex-start;
+            }
+        }
+        
+        .btn-primary {
+            background: #f1a501;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            color: #1e2b3c;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 10px 25px rgba(241, 165, 1, 0.3);
+            font-size: 16px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            background: #f0bb1f;
+            box-shadow: 0 15px 30px rgba(241, 165, 1, 0.4);
+        }
+
+        /* Rest of sections - Glassmorphism cards */
+        .section-header {
+            text-align: center;
+            margin: 60px 0 30px;
+        }
+        
+        @media (min-width: 768px) {
+            .section-header {
+                margin: 100px 0 50px;
+            }
+        }
+        
+        .section-sub {
+            color: #f0bb1f;
+            font-weight: 600;
+            letter-spacing: 3px;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+        
+        @media (min-width: 768px) {
+            .section-sub {
+                font-size: 16px;
+            }
+        }
+        
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        
+        @media (min-width: 768px) {
+            .section-title {
+                font-size: 48px;
+            }
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .service-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+        }
+        
+        .service-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-8px);
+            border-color: #f0bb1f;
+        }
+        
+        .service-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #f0bb1f;
+        }
+        
+        .service-card h4 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: white;
+        }
+        
+        .service-card p {
+            color: rgba(255,255,255,0.8);
+            font-size: 13px;
+        }
+
+        .destinations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .dest-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            overflow: hidden;
+            transition: 0.3s;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .dest-card:hover {
+            transform: scale(1.02);
+            border-color: #f0bb1f;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .dest-img {
+            height: 220px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .dest-info {
+            padding: 18px 18px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .dest-info h4 {
+            font-weight: 700;
+            font-size: 18px;
+            color: white;
+        }
+        
+        .dest-price {
+            color: #f0bb1f;
+            font-weight: 600;
+        }
+        
+        .dest-duration {
+            padding: 0 18px 20px;
+            display: flex;
+            gap: 8px;
+            color: rgba(255,255,255,0.7);
+            font-size: 13px;
+        }
+
+        .steps-booking {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin: 60px 0;
+        }
+        
+        @media (min-width: 992px) {
+            .steps-booking {
+                flex-direction: row;
+                gap: 60px;
+                margin: 80px 0;
+                align-items: center;
+            }
+        }
+        
+        .steps-left {
+            flex: 1;
+        }
+        
+        .step-item {
+            display: flex;
+            gap: 18px;
+            margin-bottom: 30px;
+            align-items: center;
+            cursor: pointer;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(8px);
+            padding: 15px 20px;
+            border-radius: 20px;
+            transition: 0.3s;
+        }
+        
+        .step-item:hover {
+            background: rgba(0,0,0,0.5);
+            transform: translateX(8px);
+        }
+        
+        .step-num {
+            width: 48px;
+            height: 48px;
+            background: #f0bb1f;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1e2b3c;
+            font-weight: 800;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .step-text h4 {
+            font-weight: 700;
+            font-size: 18px;
+            color: white;
+        }
+        
+        .step-text p {
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .booking-card-right {
+            flex: 0.9;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .booking-img {
+            height: 150px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px;
+        }
+        
+        .trip-detail {
+            padding: 16px 0;
+            color: white;
+        }
+
+        .testimonial-section {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin: 60px 0;
+        }
+        
+        @media (min-width: 992px) {
+            .testimonial-section {
+                flex-direction: row;
+                gap: 50px;
+                margin: 80px 0;
+            }
+        }
+        
+        .testimonial-left {
+            flex: 1;
+        }
+        
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 30px;
+            margin-top: 25px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .testimonial-card p {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .subscribe {
+            background: rgba(223, 215, 249, 0.15);
+            backdrop-filter: blur(12px);
+            border-radius: 60px;
+            padding: 50px 30px;
+            text-align: center;
+            margin: 60px 0;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .subscribe h3 {
+            font-size: 24px;
+            max-width: 100%;
+            margin: 0 auto 25px;
+            color: white;
+        }
+        
+        @media (min-width: 768px) {
+            .subscribe h3 {
+                font-size: 32px;
+                max-width: 600px;
+            }
+        }
+        
+        .subscribe-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        @media (min-width: 576px) {
+            .subscribe-form {
+                flex-direction: row;
+                gap: 16px;
+            }
+        }
+        
+        .subscribe-form input {
+            padding: 14px 24px;
+            border-radius: 50px;
+            border: none;
+            width: 100%;
+            max-width: 320px;
+            background: white;
+            font-size: 14px;
+        }
+        
+        .subscribe-form button {
+            background: #df6951;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .subscribe-form button:hover {
+            background: #f0bb1f;
+            color: #1e2b3c;
+        }
+
+        footer {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 30px;
+            padding: 50px 0 30px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .footer-col h3, .footer-col h4 {
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        .footer-col p {
+            color: rgba(255,255,255,0.7);
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+        
+        .footer-col i {
+            font-size: 22px;
+            margin-right: 15px;
+            cursor: pointer;
+            color: rgba(255,255,255,0.7);
+            transition: 0.2s;
+        }
+        
+        .footer-col i:hover {
+            color: #f0bb1f;
+        }
+        
+        .copyright {
+            width: 100%;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.6);
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .toast-msg {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e2b3c;
+            backdrop-filter: blur(12px);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 14px;
+            z-index: 2000;
+            border: 1px solid #f0bb1f;
+            white-space: nowrap;
+            animation: fadeSlide 2.2s ease forwards;
+        }
+        
+        @keyframes fadeSlide {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            85% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+        }
+        
+        @media (max-width: 480px) {
+            .toast-msg {
+                white-space: normal;
+                text-align: center;
+                max-width: 90%;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Fullscreen Background Slider -->
+<div class="bg-slider-container" id="bgSlider">
+    <div class="bg-slider-images" id="bgSliderImages">
+        <div class="bg-slide">
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&auto=format" alt="Beach Paradise">
+        </div>
+        <div class="bg-slide">
+            <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1920&auto=format" alt="Forest Retreat">
+        </div>
+        <div class="bg-slide">
+            <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1920&auto=format" alt="City Travel">
+        </div>
+        <div class="bg-slide">
+            <img src="https://images.unsplash.com/photo-1488085061387-422e29b40080?w=1920&auto=format" alt="Luxury Resort">
+        </div>
+    </div>
+</div>
+<div class="bg-overlay"></div>
+
+<div class="content">
+    <!-- Navbar -->
+    <nav class="navbar" data-aos="fade-down" data-aos-duration="1000">
+        <div class="logo">Dev.Kesh<span>.</span></div>
+        <div class="nav-links">
+            <a href="#">Destinations</a>
+            <a href="#">Hotels</a>
+            <a href="#">Flights</a>
+            <a href="#">Booking</a>
+            <div class="nav-buttons">
+                <button class="login-btn">Login</button>
+                <button class="signup-btn">Sign up</button>
+                <div class="lang-select">EN <i class="fas fa-chevron-down"></i></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-left" data-aos="fade-right" data-aos-duration="1000">
+            <div class="hero-badge">BEST DESTINATIONS AROUND THE WORLD</div>
+            <h1>Travel, enjoy <span>and live a new</span> and full life</h1>
+            <p class="hero-desc">Built Wicket longer admire do barton vanity itself do in it. Preferred to sportsmen it engrossed listening. Park gate sell they west hard for the.</p>
+            <div class="hero-actions">
+                <button class="btn-primary" id="findOutBtn">Find out more</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SERVICES -->
+    <div class="section-header" data-aos="fade-up">
+        <div class="section-sub">CATEGORY</div>
+        <div class="section-title">We Offer Best Services</div>
+    </div>
+    <div class="services-grid">
+        <div class="service-card" data-aos="zoom-in" data-aos-duration="800"><div class="service-icon"><i class="fas fa-cloud-sun"></i></div><h4>Calculated Weather</h4><p>Built Wicket longer admire do barton vanity itself do it in.</p></div>
+        <div class="service-card" data-aos="zoom-in" data-aos-duration="800" data-aos-delay="100"><div class="service-icon"><i class="fas fa-plane-departure"></i></div><h4>Best Flights</h4><p>Engrossed listening. Park gate sell they west hard for the.</p></div>
+        <div class="service-card" data-aos="zoom-in" data-aos-duration="800" data-aos-delay="200"><div class="service-icon"><i class="fas fa-microphone-alt"></i></div><h4>Local Events</h4><p>Barton vanity itself do it in. Preferd to men it engrossed listening.</p></div>
+        <div class="service-card" data-aos="zoom-in" data-aos-duration="800" data-aos-delay="300"><div class="service-icon"><i class="fas fa-cog"></i></div><h4>Customization</h4><p>We deliver outsourced aviation services for military customers.</p></div>
+    </div>
+
+    <!-- Top Destinations -->
+    <div class="section-header" data-aos="fade-up">
+        <div class="section-sub">Top Selling</div>
+        <div class="section-title">Top Destinations</div>
+    </div>
+    <div class="destinations-grid">
+        <div class="dest-card" data-aos="flip-left" data-aos-duration="800">
+            <div class="dest-img" style="background-image: url('https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=500&auto=format');"></div>
+            <div class="dest-info"><h4>Rome, Italy</h4><span class="dest-price">$5.42k</span></div>
+            <div class="dest-duration"><i class="fas fa-map-marker-alt"></i> 10 Days Trip</div>
+        </div>
+        <div class="dest-card" data-aos="flip-left" data-aos-duration="800" data-aos-delay="100">
+            <div class="dest-img" style="background-image: url('https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=500&auto=format');"></div>
+            <div class="dest-info"><h4>London, UK</h4><span class="dest-price">$4.2k</span></div>
+            <div class="dest-duration"><i class="fas fa-map-marker-alt"></i> 12 Days Trip</div>
+        </div>
+        <div class="dest-card" data-aos="flip-left" data-aos-duration="800" data-aos-delay="200">
+            <div class="dest-img" style="background-image: url('https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=500&auto=format');"></div>
+            <div class="dest-info"><h4>Paris, France</h4><span class="dest-price">$6.8k</span></div>
+            <div class="dest-duration"><i class="fas fa-map-marker-alt"></i> 14 Days Trip</div>
+        </div>
+        <div class="dest-card" data-aos="flip-left" data-aos-duration="800" data-aos-delay="300">
+            <div class="dest-img" style="background-image: url('https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=500&auto=format');"></div>
+            <div class="dest-info"><h4>Tokyo, Japan</h4><span class="dest-price">$7.2k</span></div>
+            <div class="dest-duration"><i class="fas fa-map-marker-alt"></i> 12 Days Trip</div>
+        </div>
+    </div>
+
+    <!-- Steps Section -->
+    <div class="steps-booking">
+        <div class="steps-left" data-aos="fade-right">
+            <div class="section-sub" style="text-align: left;">Easy and Fast</div>
+            <div class="section-title" style="font-size: 32px; margin-bottom: 30px;">Book Your Next Trip In 3 Easy Steps</div>
+            <div class="step-item"><div class="step-num">1</div><div class="step-text"><h4>Choose Destination</h4><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></div></div>
+            <div class="step-item"><div class="step-num">2</div><div class="step-text"><h4>Make Payment</h4><p>Pellentesque habitant morbi tristique senectus.</p></div></div>
+            <div class="step-item"><div class="step-num">3</div><div class="step-text"><h4>Reach Airport on Selected Date</h4><p>Enjoy guided tours and flights ready.</p></div></div>
+        </div>
+        <div class="booking-card-right" data-aos="fade-left">
+            <div class="booking-img" style="background-image: url('https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=400&auto=format');"></div>
+            <div class="trip-detail"><strong>Trip To Rome</strong><br><span>10-14 Dec 2025 | by 2 people</span></div>
+            <div><i class="fas fa-building"></i> 2 rooms booked</div>
+        </div>
+    </div>
+
+    <!-- Testimonials -->
+    <div class="testimonial-section">
+        <div class="testimonial-left" data-aos="fade-right">
+            <div class="section-sub">TESTIMONIALS</div>
+            <div class="section-title">What People Say About Us.</div>
+            <div class="testimonial-card">
+                <i class="fas fa-quote-left" style="color:#f0bb1f; font-size: 32px;"></i>
+                <p style="margin: 18px 0;">"On the Windows talking painted pasture yet its express parties use. Sure last upon he same as knew next. Of believed or diverted no."</p>
+                <h4 style="color:white;">Mike Taylor</h4>
+                <span style="color:rgba(255,255,255,0.7);">Lahore, Pakistan</span>
+            </div>
+        </div>
+        <div style="flex:1; background: rgba(255,255,255,0.1); backdrop-filter: blur(12px); border-radius: 28px; padding: 35px; text-align:center; border:1px solid rgba(255,255,255,0.2);" data-aos="fade-left">
+            <i class="fas fa-user-circle" style="font-size: 70px; color:#f0bb1f;"></i>
+            <h3 style="color:white; margin-top:15px;">Chris Thomas</h3>
+            <p style="color:rgba(255,255,255,0.8);">CEO of Readymade</p>
+            <div style="margin-top:10px;"><i class="fas fa-star" style="color:#f1a501;"></i> 4.5 (45 reviews)</div>
+        </div>
+    </div>
+
+    <!-- Subscribe -->
+    <div class="subscribe" data-aos="zoom-in">
+        <h3>Subscribe to get information, latest news and other interesting offers about Dev.Kesh</h3>
+        <div class="subscribe-form">
+            <input type="email" placeholder="Your email" id="subEmail">
+            <button id="subscribeBtn">Subscribe</button>
+        </div>
+        <p id="subMsg" style="margin-top: 18px; font-size:14px;"></p>
+    </div>
+
+    <!-- Footer -->
+    <footer data-aos="fade-up">
+        <div class="footer-col"><h3>Dev.Kesh.</h3><p>Book your trip in minutes,<br>get full control for much longer.</p></div>
+        <div class="footer-col"><h4>Company</h4><p>About<br>Careers<br>Mobile</p></div>
+        <div class="footer-col"><h4>Contact</h4><p>Help/FAQ<br>Press<br>Affiliates</p></div>
+        <div class="footer-col"><h4>More</h4><p>Airlinefees<br>Airline<br>Low fare tips</p></div>
+        <div class="footer-col"><i class="fab fa-facebook"></i> <i class="fab fa-instagram"></i> <i class="fab fa-twitter"></i><br><p style="margin-top:12px;">Discover our app</p></div>
+    </footer>
+    <div class="copyright"></div>
+</div>
+
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+    AOS.init({ once: false, duration: 1000 });
+
+    // Background Slider Functionality
+    const bgSliderImages = document.getElementById('bgSliderImages');
+    const bgSlides = document.querySelectorAll('.bg-slide');
+    let bgCurrentIndex = 0;
+    const bgTotalSlides = bgSlides.length;
+    let bgAutoInterval;
+
+    function bgGoToSlide(index) {
+        bgCurrentIndex = (index + bgTotalSlides) % bgTotalSlides;
+        bgSliderImages.style.transform = `translateX(-${bgCurrentIndex * 100}%)`;
+    }
+
+    function bgNextSlide() {
+        bgGoToSlide(bgCurrentIndex + 1);
+    }
+
+    function bgStartAutoSlide() {
+        bgAutoInterval = setInterval(bgNextSlide, 5000);
+    }
+
+    bgStartAutoSlide();
+
+    // Toast function
+    function showToast(message) {
+        const existing = document.querySelector('.toast-msg');
+        if (existing) existing.remove();
+        const toast = document.createElement('div');
+        toast.className = 'toast-msg';
+        toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+    }
+
+    // Button interactions
+    document.getElementById('findOutBtn').addEventListener('click', () => showToast("Discover best destinations curated just for you! Get exclusive deals now."));
+    
+    document.getElementById('subscribeBtn').addEventListener('click', () => {
+        const email = document.getElementById('subEmail').value.trim();
+        const msg = document.getElementById('subMsg');
+        if (email && email.includes('@') && email.includes('.')) {
+            msg.innerHTML = "✓ Thanks for subscribing! Latest news & offers will be sent to " + email;
+            msg.style.color = "#86efac";
+            document.getElementById('subEmail').value = '';
+            showToast("Successfully subscribed!");
+        } else {
+            msg.innerHTML = "✗ Please enter a valid email address.";
+            msg.style.color = "#fca5a5";
+        }
+        setTimeout(() => msg.innerHTML = '', 3000);
+    });
+
+    document.querySelector('.login-btn')?.addEventListener('click', () => showToast("Login portal opens. Access your travel dashboard."));
+    document.querySelector('.signup-btn')?.addEventListener('click', () => showToast("Create a Dev.Kesh account & get exclusive flight discounts!"));
+    document.querySelector('.lang-select')?.addEventListener('click', () => showToast("Language options: English, Spanish, French, German coming soon."));
+    
+    document.querySelectorAll('.service-card').forEach(card => {
+        card.addEventListener('click', () => showToast(`${card.querySelector('h4')?.innerText} service: Experience premium travel assistance.`));
+    });
+    
+    document.querySelectorAll('.dest-card').forEach(card => {
+        card.addEventListener('click', () => showToast(`Explore ${card.querySelector('.dest-info h4')?.innerText} with exclusive deals!`));
+    });
+    
+    document.querySelectorAll('.step-item').forEach(step => {
+        step.addEventListener('click', () => showToast("Follow these simple steps and secure your dream vacation!"));
+    });
+    
+    // Add copyright
+    const copyrightDiv = document.querySelector('.copyright');
+    copyrightDiv.innerHTML = `© ${new Date().getFullYear()} Dev.Kesh. All rights reserved. Best flights & local events.`;
+</script>
+</body>
+</html>
