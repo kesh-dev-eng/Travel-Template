@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>Dev.Kesh | Travel Beyond Limits - Background Slider</title>
-    <!-- Google Fonts + Font Awesome -->
+    <title>Dev.Kesh | Travel </title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
@@ -715,7 +714,7 @@
 </head>
 <body>
 
-<!-- Fullscreen Background Slider -->
+
 <div class="bg-slider-container" id="bgSlider">
     <div class="bg-slider-images" id="bgSliderImages">
         <div class="bg-slide">
@@ -735,7 +734,7 @@
 <div class="bg-overlay"></div>
 
 <div class="content">
-    <!-- Navbar -->
+
     <nav class="navbar" data-aos="fade-down" data-aos-duration="1000">
         <div class="logo">Dev.Kesh<span>.</span></div>
         <div class="nav-links">
@@ -751,7 +750,6 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <div class="hero">
         <div class="hero-left" data-aos="fade-right" data-aos-duration="1000">
             <div class="hero-badge">BEST DESTINATIONS AROUND THE WORLD</div>
@@ -763,7 +761,6 @@
         </div>
     </div>
 
-    <!-- SERVICES -->
     <div class="section-header" data-aos="fade-up">
         <div class="section-sub">CATEGORY</div>
         <div class="section-title">We Offer Best Services</div>
@@ -775,7 +772,6 @@
         <div class="service-card" data-aos="zoom-in" data-aos-duration="800" data-aos-delay="300"><div class="service-icon"><i class="fas fa-cog"></i></div><h4>Customization</h4><p>We deliver outsourced aviation services for military customers.</p></div>
     </div>
 
-    <!-- Top Destinations -->
     <div class="section-header" data-aos="fade-up">
         <div class="section-sub">Top Selling</div>
         <div class="section-title">Top Destinations</div>
@@ -803,7 +799,6 @@
         </div>
     </div>
 
-    <!-- Steps Section -->
     <div class="steps-booking">
         <div class="steps-left" data-aos="fade-right">
             <div class="section-sub" style="text-align: left;">Easy and Fast</div>
@@ -819,7 +814,6 @@
         </div>
     </div>
 
-    <!-- Testimonials -->
     <div class="testimonial-section">
         <div class="testimonial-left" data-aos="fade-right">
             <div class="section-sub">TESTIMONIALS</div>
@@ -839,7 +833,6 @@
         </div>
     </div>
 
-    <!-- Subscribe -->
     <div class="subscribe" data-aos="zoom-in">
         <h3>Subscribe to get information, latest news and other interesting offers about Dev.Kesh</h3>
         <div class="subscribe-form">
@@ -849,7 +842,6 @@
         <p id="subMsg" style="margin-top: 18px; font-size:14px;"></p>
     </div>
 
-    <!-- Footer -->
     <footer data-aos="fade-up">
         <div class="footer-col"><h3>Dev.Kesh.</h3><p>Book your trip in minutes,<br>get full control for much longer.</p></div>
         <div class="footer-col"><h4>Company</h4><p>About<br>Careers<br>Mobile</p></div>
@@ -864,7 +856,6 @@
 <script>
     AOS.init({ once: false, duration: 1000 });
 
-    // Background Slider Functionality
     const bgSliderImages = document.getElementById('bgSliderImages');
     const bgSlides = document.querySelectorAll('.bg-slide');
     let bgCurrentIndex = 0;
@@ -886,7 +877,6 @@
 
     bgStartAutoSlide();
 
-    // Toast function
     function showToast(message) {
         const existing = document.querySelector('.toast-msg');
         if (existing) existing.remove();
@@ -897,7 +887,6 @@
         setTimeout(() => toast.remove(), 2500);
     }
 
-    // Button interactions
     document.getElementById('findOutBtn').addEventListener('click', () => showToast("Discover best destinations curated just for you! Get exclusive deals now."));
     
     document.getElementById('subscribeBtn').addEventListener('click', () => {
@@ -931,7 +920,6 @@
         step.addEventListener('click', () => showToast("Follow these simple steps and secure your dream vacation!"));
     });
     
-    // Add copyright
     const copyrightDiv = document.querySelector('.copyright');
     copyrightDiv.innerHTML = `© ${new Date().getFullYear()} Dev.Kesh. All rights reserved. Best flights & local events.`;
 </script>
